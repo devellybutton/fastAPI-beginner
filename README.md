@@ -2,8 +2,8 @@
 > - [A very simple endpoint](https://github.com/devellybutton/fastApi-beginner?tab=readme-ov-file#a-very-simple-endpoint)
 > - [GET List Endpoint](https://github.com/devellybutton/fastApi-beginner?tab=readme-ov-file#get-list-endpoint)
 > - [GET Single Object Endpoint & Handling Errors](https://github.com/devellybutton/fastApi-beginner?tab=readme-ov-file#get-single-object-endpoint--handling-errors)
-> - Query Parameters
-> - Delete Endpoint
+> - [Query Parameters](https://github.com/devellybutton/fastApi-beginner?tab=readme-ov-file#query-parameters)
+> - [Delete Endpoint](https://github.com/devellybutton/fastApi-beginner?tab=readme-ov-file#delete-endpoint)
 > - Create Endpoint & Pydantic Schema
 > - Update Endpoint
 
@@ -202,6 +202,26 @@ def delete_course(course_id: int):
 ```
 - 204 No Content 상태 코드는 본문을 반환하지 않음.
 
+---
+
+# Create Endpoint & Pydantic Schema
+
+```
+@app.post("/api/courses/", status_code=status.HTTP_201_CREATED)
+def create_course(new_course: Course):
+	course_id = max(courses.keys()) + 1
+	courses[course_id] = new_course.model_dump()
+	return courses[course_id]
+```
+- <b>model_dump()</b> : 모델 인스턴스를 딕셔너리로 변환하여 저장하는 메서드
+- Pydantic v2에서 dict() 메서드가 더 이상 사용되지 않으므로 대신 model_dump()를 사용함.
+
+<details>
+<summary>스키마를 정의하면 Request Body로 표시됨</summary>
+
+![image](https://github.com/user-attachments/assets/0acc060c-9783-4b59-8a1e-e1b677350549)
+
+</details>
 
 ---
 

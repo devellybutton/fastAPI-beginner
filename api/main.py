@@ -1,7 +1,14 @@
 from fastapi import FastAPI, HTTPException, status
-from typing import Union
+from typing import Union, Optional
+from pydantic import BaseModel
 
 app = FastAPI()
+
+class Course(BaseModel):
+    title: str
+    teacher: str
+    students: Optional[list[str]] = []
+    level: str
 
 # 프로그램 실행시에 courses가 정의되기 때문에
 # 만약 삭제한다고 해도 서버 재실행시에 다시 생성됨.
@@ -58,3 +65,9 @@ def delete_course(course_id: int):
         raise HTTPException(
             status_code=404, detail=f"Course with id: {course_id} was not found!"
         )
+
+@app.post("/api/courses/", status_code=status.HTTP_201_CREATED)
+def create_course(new_course: Course):
+	course_id = max(courses.keys()) + 1
+	courses[course_id] = new_course.model_dump()
+	return courses[course_id]
