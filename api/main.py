@@ -1,8 +1,10 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, status
 from typing import Union
 
 app = FastAPI()
 
+# 프로그램 실행시에 courses가 정의되기 때문에
+# 만약 삭제한다고 해도 서버 재실행시에 다시 생성됨.
 courses = {
 	1: {
 		"title": "Modern History",
@@ -42,6 +44,16 @@ def get_courses(level: Union[str, None] = None):
 def get_courses(course_id: int):
     try:
         return courses[course_id]
+    except KeyError:
+        raise HTTPException(
+            status_code=404, detail=f"Course with id: {course_id} was not found!"
+        )
+
+@app.delete("/api/courses/{course_id}/", status_code=status.HTTP_204_NO_CONTENT)
+def delete_course(course_id: int):
+    try:
+        del courses[course_id]
+        return {"message": f"Course with id {course_id} has been deleted."}
     except KeyError:
         raise HTTPException(
             status_code=404, detail=f"Course with id: {course_id} was not found!"

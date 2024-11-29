@@ -190,6 +190,19 @@ def get_courses(level: Union[str, None] = None):
 
 # Delete Endpoint
 
+```
+@app.delete("/api/courses/{course_id}/", status_code=status.HTTP_204_NO_CONTENT)
+def delete_course(course_id: int):
+    try:
+        del courses[course_id]
+    except KeyError:
+        raise HTTPException(
+            status_code=404, detail=f"Course with id: {course_id} was not found!"
+        )
+```
+- 204 No Content 상태 코드는 본문을 반환하지 않음.
+
+
 ---
 
 ### 참고 링크
