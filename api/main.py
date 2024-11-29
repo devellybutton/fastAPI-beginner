@@ -71,3 +71,17 @@ def create_course(new_course: Course):
 	course_id = max(courses.keys()) + 1
 	courses[course_id] = new_course.model_dump()
 	return courses[course_id]
+
+@app.put("/api/courses/{course_id}/")
+def update_course(course_id: int, updated_course: Course):
+        try:
+            course = courses[course_id]
+            course["title"] = updated_course.title
+            course["teacher"] = updated_course.teacher
+            course["students"] = updated_course.students
+            course["level"] = updated_course.level
+            return f"Course {course_id} was updated!, Course: {courses[course_id]}"
+        except KeyError:
+            raise HTTPException(
+                status_code=404, detail=f"Course with id: {course_id} was not found!"
+            )

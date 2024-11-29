@@ -4,8 +4,8 @@
 > - [GET Single Object Endpoint & Handling Errors](https://github.com/devellybutton/fastApi-beginner?tab=readme-ov-file#get-single-object-endpoint--handling-errors)
 > - [Query Parameters](https://github.com/devellybutton/fastApi-beginner?tab=readme-ov-file#query-parameters)
 > - [Delete Endpoint](https://github.com/devellybutton/fastApi-beginner?tab=readme-ov-file#delete-endpoint)
-> - Create Endpoint & Pydantic Schema
-> - Update Endpoint
+> - [Create Endpoint & Pydantic Schema](https://github.com/devellybutton/fastApi-beginner?tab=readme-ov-file#create-endpoint--pydantic-schema)
+> - [Update Endpoint](https://github.com/devellybutton/fastApi-beginner?tab=readme-ov-file#update-endpoint)
 
 -----
 
@@ -225,7 +225,28 @@ def create_course(new_course: Course):
 
 ---
 
-### 참고 링크
+# Update Endpoint
+
+```
+@app.put("/api/courses/{course_id}/")
+def update_course(course_id: int, updated_course: Course):
+        try:
+            course = courses[course_id]
+            course["title"] = updated_course.title
+            course["teacher"] = updated_course.teacher
+            course["students"] = updated_course.students
+            course["level"] = updated_course.level
+            return f"Course {course_id} was updated!, Course: {courses[course_id]}"
+        except KeyError:
+            raise HTTPException(
+                status_code=404, detail=f"Course with id: {course_id} was not found!"
+            )
+```
+- `courses[course_id] = updated_course.model_dump()` : 업데이트된 데이터를 딕셔너리에 저장
+
+---
+
+## 참고 링크
 
 - [Beginners FastAPI - 40 min](https://youtu.be/O05PucyQYBg?feature=shared)
 - [공식 문서 - FastAPI](https://fastapi.tiangolo.com/#sponsors)
