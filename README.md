@@ -1,8 +1,7 @@
 > - Installation
 > - A very simple endpoint
 > - GET List Endpoint
-> - GET Single Object Endpoint
-> - Handling Errors
+> - GET Single Object Endpoint & Handling Errors
 > - Query Parameters
 > - Delete Endpoint
 > - Create Endpoint & Pydantic Schema
@@ -116,6 +115,7 @@ uvicorn main:app --reload
 ![image](https://github.com/user-attachments/assets/98cf6f43-6e8f-4389-8318-74d9b8573b30)
 
 </summary>
+</details>
 
 ---
 
@@ -147,6 +147,27 @@ courses = {
 def get_courses():
     return courses
 ```
+---
+
+# GET Single Object Endpoint & Handling Errors
+
+```
+@app.get("/api/courses/{course_id}/")
+def get_courses(course_id: int):
+    try:
+        return courses[course_id]
+    except KeyError:
+        raise HTTPException(
+            status_code=404, detail=f"Course with id: {course_id} was not found!"
+        )
+```
+- <b>요청이 성공적인 경우</b>
+    - GET http://127.0.0.1:8000/api/courses/2/
+    - courses 딕셔너리에서 2를 키로 사용
+
+- <b>요청이 실패한 경우</b>
+    - GET http://127.0.0.1:8000/api/courses/4/
+    - HTTPException을 raise 하여 status_code와 detail을 지정해준다.
 
 ---
 

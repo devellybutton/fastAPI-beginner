@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 
 app = FastAPI()
 
@@ -27,6 +27,11 @@ courses = {
 def hello_word():
     return {"message": "Hello World"}
 
-@app.get("/api/courses")
-def get_courses():
-    return courses
+@app.get("/api/courses/{course_id}/")
+def get_courses(course_id: int):
+    try:
+        return courses[course_id]
+    except KeyError:
+        raise HTTPException(
+            status_code=404, detail=f"Course with id: {course_id} was not found!"
+        )
