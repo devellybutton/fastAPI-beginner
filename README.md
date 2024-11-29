@@ -1,7 +1,7 @@
-> - Installation
-> - A very simple endpoint
-> - GET List Endpoint
-> - GET Single Object Endpoint & Handling Errors
+> - [Installation](https://github.com/devellybutton/fastApi-beginner?tab=readme-ov-file#installation)
+> - [A very simple endpoint](https://github.com/devellybutton/fastApi-beginner?tab=readme-ov-file#a-very-simple-endpoint)
+> - [GET List Endpoint](https://github.com/devellybutton/fastApi-beginner?tab=readme-ov-file#get-list-endpoint)
+> - [GET Single Object Endpoint & Handling Errors](https://github.com/devellybutton/fastApi-beginner?tab=readme-ov-file#get-single-object-endpoint--handling-errors)
 > - Query Parameters
 > - Delete Endpoint
 > - Create Endpoint & Pydantic Schema
@@ -168,6 +168,27 @@ def get_courses(course_id: int):
 - <b>요청이 실패한 경우</b>
     - GET http://127.0.0.1:8000/api/courses/4/
     - HTTPException을 raise 하여 status_code와 detail을 지정해준다.
+
+---
+
+# Query Parameters
+```
+@app.get("/api/courses/")
+def get_courses(level: Union[str, None] = None):
+    if level:
+        level_course = []
+        for index in courses.keys():
+            if courses[index]["level"] == level:
+                level_course.append(courses[index])
+        return level_course
+    return courses
+```
+- 쿼리파라미터 level이 <b>있는</b> 경우 : Object.keys()로 key를 순회하며 쿼리파라미터로 받은 레벨과 해당 레벨이 일치하는 것을 리스트에 넣어서 반환함.
+- 쿼리파라미터 level이 <b>없는</b> 경우 : 전체 리스트 반환 
+
+---
+
+# Delete Endpoint
 
 ---
 

@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException
+from typing import Union
 
 app = FastAPI()
 
@@ -26,6 +27,16 @@ courses = {
 @app.get("/api/hello/")
 def hello_word():
     return {"message": "Hello World"}
+
+@app.get("/api/courses/")
+def get_courses(level: Union[str, None] = None):
+    if level:
+        level_course = []
+        for index in courses.keys():
+            if courses[index]["level"] == level:
+                level_course.append(courses[index])
+        return level_course
+    return courses
 
 @app.get("/api/courses/{course_id}/")
 def get_courses(course_id: int):
